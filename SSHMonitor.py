@@ -22,14 +22,6 @@ class Error(ValueError):
     pass
 
 
-"""
-
-
-Spell check this file before github
-
-
-"""
-
 def _request(method, data=None):
     """Make the raw request to the Prowl API."""
 
