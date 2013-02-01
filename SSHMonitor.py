@@ -26,16 +26,14 @@ def _request(method, data=None):
 
 
 """
-Send a message.
-
-    Parameters:
-        key -- An API key, or a list of API keys to post to.
-        message -- The message to send.
-        priority -- Integer from -2 to 2 inclusive.
-        url -- Requires Prowl 1.2 The URL which should be attached to the notification.
-        app -- App identifier to send as.
-        event -- Event identifier to send as.
-        providerkey -- Provider API key if you have been whitelisted.
+Parameters:
+    key -- An API key, or a list of API keys to post to.
+    message -- The message to send.
+    priority -- Integer from -2 to 2 inclusive.
+    url -- Requires Prowl 1.2 The URL which should be attached to the notification.
+    app -- App identifier to send as.
+    event -- Event identifier to send as.
+    providerkey -- Provider API key if you have been whitelisted.
 """
 def sendNotification(key, message, priority=None, url=None, app=None, event=None, providerkey=None):
 
@@ -123,23 +121,8 @@ def getNewRejectedData():
     output_auth_falure = os.system("grep -i 'sshd' /var/log/system.log | grep 'authentication error'")
 
 
-""" This is the old way of doing it. """
-def oldWayOfDoingIt:
-    output_received = os.system("grep -i 'sshd' /var/log/system.log | grep 'Received disconnect'")
-    output_user = os.system("grep -i 'sshd' /var/log/system.log | grep 'Invalid user'")
-    output_auth_falure = os.system("grep -i 'sshd' /var/log/system.log | grep 'authentication error'")
-    output = output_received + output_user + output_auth_falure
-    f = open('cache', 'r+')
-    t = open('temp', 'r+')
-    t.write(output)
-    diff = os.system("diff cache temp")
-    print diff
-    if(diff[len(diff)] is 1):
-        #diff, send user message, use prowl
-    os.system("mv temp cache")
-
-
 if __name__ == '__main__':
+
 
 
 
