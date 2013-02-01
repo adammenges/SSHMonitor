@@ -113,7 +113,7 @@ def purgeData():
 
 
 """ write the current data to the filesystem to survive a reboot """
-def purgeData():
+def saveData():
 
 
 
