@@ -8,7 +8,6 @@ rejectedData[]
 acceptedData[]
 _last_meta_data = {}
 
-
 __all__ = ['Error', 'get_remaining', 'get_reset_time', 'verify', 'post', 'Prowl', 'LogHandler']
 
 API_URL_BASE = 'https://api.prowlapp.com/publicapi/'
@@ -17,12 +16,45 @@ DEFAULT_PRIORITY = 0
 DEFAULT_APP = 'py:%s' % __name__
 DEFAULT_EVENT = 'default'
 
-
 class Error(ValueError):
+    print ValueError
     pass
 
 
 def _request(method, data=None):
+
+
+
+"""
+Send a message.
+
+    Parameters:
+        key -- An API key, or a list of API keys to post to.
+        message -- The message to send.
+        priority -- Integer from -2 to 2 inclusive.
+        url -- Requires Prowl 1.2 The URL which should be attached to the notification.
+        app -- App identifier to send as.
+        event -- Event identifier to send as.
+        providerkey -- Provider API key if you have been whitelisted.
+"""
+def sendNotification(key, message, priority=None, url=None, app=None, event=None, providerkey=None):
+
+    data = {
+            'apikey': key if isinstance(key, basestring) else ','.join(key),
+            'priority': priority or DEFAULT_PRIORITY,
+            'application': app or DEFAULT_APP,
+            'event': event or DEFAULT_EVENT,
+            'description': message
+            }
+
+    if url is not None:
+        data['url'] = url
+
+    if providerkey is not None:
+        data['providerkey'] = providerkey
+
+    method = 'add'
+
     """Make the raw request to the Prowl API."""
 
     # Catch the errors and treat them just like the normal response.
@@ -51,44 +83,6 @@ def _request(method, data=None):
 
     data = dict((k, int(v)) for k, v in data.items())
     _last_meta_data.update(data)
-
-    return status, data, text
-
-
-
-def sendNotification(key, message, priority=None, url=None, app=None, event=None, providerkey=None):
-
-"""
-Send a message.
-
-    Parameters:
-        key -- An API key, or a list of API keys to post to.
-        message -- The message to send.
-        priority -- Integer from -2 to 2 inclusive.
-        url -- Requires Prowl 1.2 The URL which should be attached to the notification.
-        app -- App identifier to send as.
-        event -- Event identifier to send as.
-        providerkey -- Provider API key if you have been whitelisted.
-"""
-
-    data = {
-            'apikey': key if isinstance(key, basestring) else ','.join(key),
-            'priority': priority or DEFAULT_PRIORITY,
-            'application': app or DEFAULT_APP,
-            'event': event or DEFAULT_EVENT,
-            'description': message
-            }
-
-    if url is not None:
-        data['url'] = url
-
-    if providerkey is not None:
-        data['providerkey'] = providerkey
-
-    status, data, text = _request('add', data)
-
-    if status != 'success':
-        raise Error(text.lower())
 
 
 
