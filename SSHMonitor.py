@@ -10,11 +10,7 @@ _last_meta_data = {}
 
 __all__ = ['Error', 'get_remaining', 'get_reset_time', 'verify', 'post', 'Prowl', 'LogHandler']
 
-API_URL_BASE = 'https://api.prowlapp.com/publicapi/'
 
-DEFAULT_PRIORITY = 0
-DEFAULT_APP = 'py:%s' % __name__
-DEFAULT_EVENT = 'default'
 
 class Error(ValueError):
     print ValueError
@@ -33,6 +29,11 @@ Parameters:
     providerkey -- Provider API key if you have been whitelisted.
 """
 def sendNotification(key, message, priority=None, url=None, app=None, event=None, providerkey=None):
+
+    API_URL_BASE = 'https://api.prowlapp.com/publicapi/'
+    DEFAULT_PRIORITY = 0
+    DEFAULT_APP = 'py:%s' % __name__
+    DEFAULT_EVENT = 'default'
 
     data = {
             'apikey': key if isinstance(key, basestring) else ','.join(key),
