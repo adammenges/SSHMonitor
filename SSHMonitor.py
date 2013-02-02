@@ -21,9 +21,6 @@ class Error(ValueError):
     pass
 
 
-def _request(method, data=None):
-
-
 
 """
 Parameters:
