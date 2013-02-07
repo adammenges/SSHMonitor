@@ -3,6 +3,7 @@ from urllib import urlencode
 from urllib2 import urlopen, HTTPError
 from xml.etree.ElementTree import XML
 import logging
+import re
 
 rejectedData[]
 acceptedData[]
@@ -31,7 +32,7 @@ def sendNotification(key, message, priority=None, url=None, app=None, event=None
 
     API_URL_BASE = 'https://api.prowlapp.com/publicapi/'
     DEFAULT_PRIORITY = 0
-    DEFAULT_APP = 'py:%s' % __name__
+    DEFAULT_APP = 'SSHMonitor'
     DEFAULT_EVENT = 'default'
 
     data = {
@@ -67,12 +68,15 @@ def sendNotification(key, message, priority=None, url=None, app=None, event=None
     node = children[0]
     status, data, text = node.tag, node.attrib, node.text
 
+    # Unknown status
     if status not in ('success', 'error'):
         raise Error('malformed response: unknown status %r' % node.tag)
 
+    # No response code
     if 'code' not in node.attrib:
         raise Error('malformed response: no response code')
 
+    # No error message with code
     if status == 'error' and not text:
         raise Error('malformed response: no error message with code %d' % data['code'])
 
@@ -82,8 +86,9 @@ def sendNotification(key, message, priority=None, url=None, app=None, event=None
 
 
 """ parse the timestamp from the line of data given """
-def getTimeStamp():
-
+def getTimeStamp(line):
+    # Example time line: Feb  7 09:08:51 server.private sshd[93600]: Accepted publickey for adammenges from *.*.*.* port ***** ssh2
+    time = re.search(r'(\d+:\d+:\d+)', line)
 
 
 """ parse the host from the line of data given """
@@ -119,10 +124,6 @@ def getNewRejectedData():
 
 
 if __name__ == '__main__':
-
-
-
-
 
 
 
